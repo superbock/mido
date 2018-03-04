@@ -5,11 +5,23 @@ DEFAULT_TIME_SIGNATURE = (4, 4)
 
 def tick2second(tick, ticks_per_beat=DEFAULT_TICKS_PER_BEAT,
                 tempo=DEFAULT_TEMPO):
-    """Convert absolute time in ticks to seconds.
+    """
+    Convert MIDI ticks to seconds.
 
-    Returns absolute time in seconds for a chosen MIDI file time resolution
-    (ticks/pulses per quarter note, also called PPQN) and tempo (microseconds
-    per quarter note).
+    Parameters
+    ----------
+    tick : int
+        MIDI ticks.
+    ticks_per_beat : int, optional
+        MIDI file time resolution (ticks/pulses per quarter note, PPQN).
+    tempo : int, optional
+        MIDI file tempo (microseconds per quarter note).
+
+    Returns
+    -------
+    seconds : float
+        Time in seconds.
+
     """
     scale = tempo * 1e-6 / ticks_per_beat
     return tick * scale
@@ -17,54 +29,129 @@ def tick2second(tick, ticks_per_beat=DEFAULT_TICKS_PER_BEAT,
 
 def second2tick(second, ticks_per_beat=DEFAULT_TICKS_PER_BEAT,
                 tempo=DEFAULT_TEMPO):
-    """Convert absolute time in seconds to ticks.
+    """
+    Convert seconds to MIDI ticks.
 
-    Returns absolute time in ticks for a chosen MIDI file time resolution
-    (ticks/pulses per quarter note, also called PPQN) and tempo (microseconds
-    per quarter note). Normal rounding applies.
+    Parameters
+    ----------
+    second : float
+        Time in seconds.
+    ticks_per_beat : int, optional
+        MIDI file time resolution (ticks/pulses per quarter note, PPQN).
+    tempo : int, optional
+        MIDI file tempo (microseconds per quarter note).
+
+    Returns
+    -------
+    ticks : int
+        MIDI ticks.
+
+    Notes
+    -----
+    The returned `ticks` are of type integer, thus normal rounding applies.
+
     """
     scale = tempo * 1e-6 / ticks_per_beat
     return int(round(second / scale))
 
 
 def bpm2tempo(bpm, time_signature=DEFAULT_TIME_SIGNATURE):
-    """Convert BPM (beats per minute) to MIDI file tempo (microseconds per
-    quarter note).
+    """
+    Convert beats per minute to MIDI tempo.
 
-    Depending on the chosen time signature a bar contains a different number of
-    beats. These beats are multiples/fractions of a quarter note, thus the
-    returned BPM depend on the time signature. Normal rounding applies.
+    Parameters
+    ----------
+    bpm : float
+        Beats per minute.
+    time_signature : tuple, optional
+        Time signature.
+
+    Returns
+    -------
+    tempo : int
+        MIDI tempo (microseconds per quarter note).
+
+    Depending on the chosen `time_signature` a bar contains a different
+    number of beats. These beats are multiples/fractions of a quarter note,
+    thus the returned tempo depends on the time signature.
+
+    Notes
+    -----
+    The returned `tempo` is of type integer, thus normal rounding applies.
+
     """
     return int(round(60 * 1e6 / bpm * time_signature[1] / 4.))
 
 
 def tempo2bpm(tempo, time_signature=DEFAULT_TIME_SIGNATURE):
-    """Convert MIDI file tempo (microseconds per quarter note) to BPM (beats
-    per minute).
+    """
+    Convert MIDI tempo to beats per minute.
 
-    Depending on the chosen time signature a bar contains a different number of
-    beats. These beats are multiples/fractions of a quarter note, thus the
-    returned tempo depends on the time signature.
+    Parameters
+    ----------
+    tempo : int
+        MIDI tempo (microseconds per quarter note).
+    time_signature : tuple, optional
+        Time signature.
+
+    Returns
+    -------
+    bpm : float
+        Beats per minute.
+
+    Depending on the chosen `time_signature` a bar contains a different number
+    of beats. These beats are multiples/fractions of a quarter note, thus the
+    returned `bpm` depend on the time signature.
+
     """
     return 60 * 1e6 / tempo * time_signature[1] / 4.
 
 
 def tick2beat(tick, ticks_per_beat=DEFAULT_TICKS_PER_BEAT,
               time_signature=DEFAULT_TIME_SIGNATURE):
-    """Convert ticks to beats.
+    """
+    Convert MIDI ticks to beats.
 
-    Returns beats for a chosen MIDI file time resolution (ticks/pulses per
-    quarter note, also called PPQN) and time signature.
+    Parameters
+    ----------
+    tick : int
+        MIDI ticks.
+    ticks_per_beat : int, optional
+        MIDI file time resolution (ticks/pulses per quarter note, PPQN).
+    time_signature : tuple, optional
+        Time signature.
+
+    Returns
+    -------
+    beats : float
+        Beats.
+
     """
     return tick / (4. * ticks_per_beat / time_signature[1])
 
 
 def beat2tick(beat, ticks_per_beat=DEFAULT_TICKS_PER_BEAT,
               time_signature=DEFAULT_TIME_SIGNATURE):
-    """Convert beats to ticks.
+    """
+    Convert beats to ticks.
 
-    Returns ticks for a chosen MIDI file time resolution (ticks/pulses per
-    quarter note, also called PPQN) and time signature. Normal rounding
-    applies.
+    Parameters
+    ----------
+    beat : float
+        Beats.
+    ticks_per_beat : int, optional
+        MIDI file time resolution (ticks/pulses per quarter note, PPQN).
+    time_signature : tuple, optional
+        Time signature.
+
+    Returns
+    -------
+    ticks : int
+        MIDI ticks.
+
+    Notes
+    -----
+    The returned `ticks` are of type integer, thus normal rounding applies.
+
     """
     return int(round(beat * 4. * ticks_per_beat / time_signature[1]))

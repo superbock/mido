@@ -275,6 +275,41 @@ def write_track(outfile, track):
 
 
 class MidiFile(object):
+    """
+    MIDI file.
+
+    Parameters
+    ----------
+    filename : str, optional
+        MIDI file name.
+    file : open file handle, optional
+        Open file handle of MIDI file. If given, `filename` is ignored.
+    type : {0, 1, 2}
+        MIDI file format.
+    ticks_per_beat : int, optional
+        MIDI resolution (i.e. ticks/pulses per quarter note PPQN).
+    unit : str, optional
+        Unit of all MIDI messages, can be one of the following:
+
+        - 'seconds'': use seconds as unit,
+        - 'ticks': use native MIDI ticks as unit,
+        - 'beats' : use beats as unit.
+
+    timing : str, optional
+        Timing of all MIDI messages, can be one of the following:
+
+        - 'relative': use relative timing, i.e. delta to previous message,
+        - 'absolute': use absolute timing.
+
+    charset : str, optional
+        Character set of the MIDI file.
+    debug : bool, optional
+        Debug flag.
+    clip : bool, optional
+        Clip values of MIDI messages to valid range.
+
+    """
+
     def __init__(self, filename=None, file=None,
                  type=1, ticks_per_beat=DEFAULT_TICKS_PER_BEAT, unit='seconds',
                  timing='relative', charset='latin1', debug=False, clip=False):
